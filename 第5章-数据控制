@@ -1,0 +1,85 @@
+5.1   将错误消灭在开始
+Java提供的多种技术来实现这一目标：
+1.异常处理机制
+2.API类的方法返回出错信息
+3.编程人员自定义的纠错功能（利用继承Java强大的API异常处理类，对具体输入的数据错误，产生针对性的处理信息，并提供纠错代码）
+
+
+5.2
+最常见的异常有：数据类型错误，数据超界，被零除，调用一个不存在的方法，等等。
+我们称try-catch为Java传统异常处理机制，其语法格式如下：
+try
+{
+  //将可能产生异常的语句包括在try的花括号内
+  statements；
+  ...
+}
+catch （ExceptionClass1 objectName）
+{
+  //显示该异常信息
+  statements；
+}
+...
+catch （ExceptionClassn objectName）
+{
+  //显示该异常信息
+  statements；
+}
+
+其中，try与catch都是java的关键字，分别称为try程序块与catch程序块。 在try中抛出的异常，才可能被在下面的catch捕捉，（即使在try中只有一行语句，花括号也不可以省略）
+catch括号中列出的参数分别是所抛出异常的类名，以及要创建的对象名
+
+如果程序中没有提供与抛出的异常相同类型的catch，JVM将参与这个未完成的任务，迫使程序停止运行，并显示由JVM所捕捉的异常处理信息。如果用户输入的是正确的数
+值，程序将按惯例正常运行，所有的catch将被自动忽略
+
+我们称API类的方法自动抛出异常为系统异常抛出。
+
+Java提供一系列异常处理API类，即标准异常类。异常，Exception是Java API的一个类，由它衍生了许多子类，来处理各种异常问题。Exception为超类，其余是子类
+Exception
+    RuntimeException
+    NoSuchElementException
+    InputMismatchException --------->
+    IllegalArgumentException ------------->这四个是常用的进行有关数据验证的标准异常类
+    NumberFormatException    ------------->
+    ArithmeticException   ---------->
+    NullPointerException
+    
+    常用抛出数据异常的API类方法：
+    API类                方法                                                                                            抛出异常
+    Scanner       nextChar(),nextByte(),nextShort(),nextInt(),nextLong(),nextFloat(),nextDouble(),nextBoolean().    InputMismatchException
+    Integer       parseInt()                                                                                        NumberFormatException
+    Double        parseDouble()                                                                                     NumberFormatException
+     
+    Scanner类验证输入数据的方法
+    hasNext()                 若有输入，返回真，否则返回假
+    hasNextInt()                 若有整数输入，返回真，否则返回假
+    hasNextDouble()                 若有双精度浮点数输入，返回真，否则返回假
+    
+    Java的throw语句语法格式为：throw exceptionObjectName;
+                                    /*要抛出的异常对象名*/    
+     或者利用throw的传统语法格式：throw new ExceptionName（[message]）;
+                                         /*一个异常类的构造器*/
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
