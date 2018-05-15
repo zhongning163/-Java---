@@ -33,6 +33,133 @@
   实例方法代表对象行为，执行对象要进行的运算和操作
   静态方法也称为类方法，代表整个类的行为，执行这个类的所有对象都可参与的运算和操作
   
-  
+重载中的各个方法必须具有不同的签名，签名包括方法名，参数类型、个数、参数顺序。
 
+方法的访问修饰符、返回变量和参数名不属于签名部分
+
+this的用法
+  1.表示对象的变量
+      如:public method（int n）
+      {
+      this.n=n;
+      }
+  
+  2.在调用构造器中启动另外一个构造器，实现对当前对象的变量的再赋值
+      如：public class Rectangle
+      { private double x,y;
+      private double width,height;
+    
+      public Rectangle()
+      { this(0,0,0,0);          //启动有4个参数的构造器
+      }
+    
+      public Rectangle()
+      { this(0,0,width,height);          //启动有4个参数的构造器
+      }
+    
+      public Rectangle(double x,double y,double width,double height)
+      { this.x=x;
+        this.y=y;
+        this.width=width;
+        this.height=height;
+      }
+    }
+    ...
+    Java中不允许直接调用构造器，如
+      Rectangle(0,0,1.22,29)  //非法调用
+      objName.Rectangle(0,0,1.22,29)  //非法调用
+      这些都是语法错误
+  
+      注意：this()必须是构造器中的第一行语句
+  3.表示返回当前的对象
+  4.将当前执行的对象传递到一个方法中
+  
+  静态数据属于全体对象，是所有对象共享的数据，或类数据
+    静态常量也称为类常量
+    静态变量也称为类变量
+    静态方法也称为类方法，而一般的方法称为对象方法
+    
+  静态常量必须在定义时赋值，否则为非法
+  
+  静态方法在创建对象之前就已经占据了存储空间，不依赖于对象而存在，可以直接用类名来调用静态方法
+  由类直接调用静态方法可以提高代码执行效率，省去由对象调用方法时装载引用地址的操作，但它与面向对象编程的基本精神矛盾。
+  不适当地使用静态数据和静态方法会破坏程序体应该具有的独立性结构和模块化设计
+  
+    如果能不使用static，尽量避免
+    如果一个方法完全不涉及具体对象就可确定其运算和操作，可以考虑定义为静态方法
+    如果必须使用静态数据，首先考虑静态常量
+    尽量用类来调用静态方法，而不是由具体对象调用
+    
+  静态方法中禁止访问非静态数据和方法，也不能使用this。而非静态方法中可以访问静态数据和静态方法
+    
+  有时静态数据可能是一组数据，不可能由一条语句完成其初始化的内容。
+    如静态数据是一个具有5个单元的数组
+    public static double taxRate[5];
+    Java提供的静态初始化程序块，即static initialization，用来解决此类问题
+    
+    static
+    {//任何对静态数据初始化的语句
+    ...
+    }
+    
+   当这个类中任何一个构造器被执行，或者任何一个静态方法被调用时，静态初始化程序块首先被执行。这样保证了静态数据首先被初始化，
+然后再被使用。
+
+创建对象：SomeClass  obj=new SomeClass(x);
+  当这行语句被执行时，构造器被调用，实例变量被初始化，储存空间被确定，obj则指向由new操作符返回的这个内存空间的开始地址
+这个过程被称为实例化（instantiating）；这个操作被称为（instantiation）
+
+对象创建引用：
+为增强封装性，像对许多API类的对象创建那样，利用对象创建引用，将创建对象的代码和过程封装在某个方法中，这样体现了“信息屏蔽”的抽象化原则。。
+弥补了静态方法破坏封装性的不足
+  如：
+  public static SomeClass getSomeClassInstance()
+  {
+    SomeClass object =new SomeClass();
+    return object;
+  }
+  SomeClass myobj=SomeClass.getSomeClassInstance();
+  
+  对象引用：
+  完全不用于创建对象和创建引用，它是指在创建了一个对象之后，利用另外一个或多个对象名指向这个已经存在的对象
+  如：
+    SomeClass obj1=new SomeClass(10);
+    SomeClass obj2=obj1;
+    SomeClass obj3=obj2;
+  obj2和obj3都是对象obj1的引用，任何对obj1变量的修改、运算、操作，都影响到obj2、obj3对它的引用，反之亦然
+  
+  对象引用就是对已创建的对象的地址引用，而创建对象则会分配新的储存空间
+  
+  一个对象名可以被重新利用，来创建其他同类对象（必须是同类，否则非法）
+    如：
+    ...
+    int count=1;
+    SomeClass obj;
+      while(count<3)
+      {
+        obj=new SomeClass(5*count);                 //对象名obj在循环中重复使用3次
+        ...
+        System.out.println("other obj's x="+obj.getX());
+        count++;
+      }
+      obj=new SomeClass(20);    //再次重用
+   每进行下一次迭代时，旧对象obj结束其生命周期，被JVM的垃圾回收器收回，其储存区域被释放，一个相同名的新对象被创建。
+   结束循环后，obj再次被重用，创建一个新的对象，这时obj重新被初始化并得到储存区域。
+   
+ 在一行语句中按先后次序连续调用多个方法，这种方法调用被称为方法链式调用，方法链式调用的语法要求如下：
+  Identifier.method1（）.method2().[methodn_1()].methodn()
+  其中：Identifier可以是对象或者类
+  除最后一个方法不要求必须返回对象或对象引用外，其余方法必须返回一个支持方法调用的对象或对象引用
+不适当使用方法链式调用将削弱程序的可读性
+   
+   
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
